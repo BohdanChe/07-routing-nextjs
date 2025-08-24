@@ -1,6 +1,6 @@
 // app/notes/filter/[...slug]/page.tsx
 
-import NotesClient from "../../Notes.client";
+import NotesClient from "./Notes.client";
 import { fetchNotes } from "@/lib/api";
 
 export default async function NotesPage({ params }: { params: { slug?: string[] } }) {
