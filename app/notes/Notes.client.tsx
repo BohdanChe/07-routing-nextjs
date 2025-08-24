@@ -14,16 +14,20 @@ import css from './Notes.module.css';
 
 interface NotesClientProps {
   initialData: FetchNotesResponse;
+  tag: string; // 🟢 нове поле
 }
 
-export default function NotesClient({ initialData }: NotesClientProps) {
+export default function NotesClient({ initialData, tag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data } = useQuery({
-    queryKey: ['notes', searchQuery, currentPage],
-    queryFn: () => fetchNotes(searchQuery, currentPage),
+    queryKey: ['notes', searchQuery, currentPage, tag],
+    queryFn: () => {
+      const tagParam = tag === 'All' ? '' : tag;
+      return fetchNotes(searchQuery, currentPage, tagParam);
+    },
     placeholderData: keepPreviousData,
     initialData,
   });
@@ -42,10 +46,12 @@ export default function NotesClient({ initialData }: NotesClientProps) {
       <main>
         <section>
           <header className={css.toolbar}>
-          <SearchBox
-  value={searchQuery}
-  onChange={changeSearchQuery}
-/>
+            <h2>
+              Notes {tag !== 'All' ? `– ${tag}` : ''}
+            </h2>
+
+            <SearchBox value={searchQuery} onChange={changeSearchQuery} />
+
             {totalPages > 1 && (
               <Pagination
                 totalPages={totalPages}
@@ -63,7 +69,12 @@ export default function NotesClient({ initialData }: NotesClientProps) {
               <NoteForm onClose={toggleModal} />
             </Modal>
           )}
-          {notes.length > 0 && <NoteList notes={notes} />}
+
+          {notes.length > 0 ? (
+            <NoteList notes={notes} />
+          ) : (
+            <p>No notes found</p>
+          )}
         </section>
       </main>
     </div>

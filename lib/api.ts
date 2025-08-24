@@ -24,12 +24,17 @@ export interface FetchNotesParams {
 }
 
 // Завантаження списку нотаток
-export const fetchNotes = async (searchText: string, page: number) => {
+export const fetchNotes = async (
+  searchText: string,
+  page: number,
+  tag?: string
+) => {
   const response = await axiosInstance.get<FetchNotesResponse>('/notes', {
     params: {
       ...(searchText !== '' && { search: searchText }),
       page,
       perPage: 12,
+      ...(tag && tag !== 'All' && { tag }), // 🟢 передаємо тег тільки якщо він не "All"
     },
   });
   return response.data;
