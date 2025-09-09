@@ -76,8 +76,11 @@ export const getNotes = async (categoryId?: string) => {
 };
 
 export const getCategories = async (): Promise<Category[]> => {
-  
-    const res  = await axiosInstance.get<Category[]>('/categories');
-    return res.data
-  
+  try {
+    const { data } = await axiosInstance.get<Category[]>('/categories');
+    return data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return []; // <-- важливо
+  }
 };
