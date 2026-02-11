@@ -19,11 +19,10 @@ const useToggle = (): [boolean, () => void, () => void] => {
 };
 
 interface NotesClientProps {
-  initialData?: NotesResponse; // об'єкт із notes та totalPages
   initialTag?: string;
 }
 
-export default function NotesClient({ initialData, initialTag }: NotesClientProps) {
+export default function NotesClient({ initialTag }: NotesClientProps) {
   const [isModalOpen, openModal, closeModal] = useToggle();
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -42,12 +41,11 @@ export default function NotesClient({ initialData, initialTag }: NotesClientProp
   const { data, isLoading } = useQuery({
     queryKey: ["notes", searchQuery, page, initialTag],
     queryFn: () => getNotes(searchQuery, page, initialTag),
-    // rely on hydration from server prefetch; fall back to optional initialData
+    // rely on hydration from server prefetch; placeholder keeps previous data during refetch
     placeholderData: keepPreviousData,
   });
 
-  const resolved = data ?? initialData;
-  const currentTotalPages = resolved?.totalPages ?? 0;
+  const currentTotalPages = data?.totalPages ?? 0;
 
   return (
     <div className={css.app}>
@@ -66,13 +64,10 @@ export default function NotesClient({ initialData, initialTag }: NotesClientProp
         </button>
       </header>
 
-      {resolved && resolved.notes.length > 0 && (
-        <NoteList notes={resolved.notes} />
-      )}
+      {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
 
       {isLoading && <p>Loading...</p>}
-
-      {resolved && !isLoading && resolved.notes.length === 0 && (
+      {data && !isLoading && data.notes.length === 0 && (
         <EmptyState message="No notes found." />
       )}
 
