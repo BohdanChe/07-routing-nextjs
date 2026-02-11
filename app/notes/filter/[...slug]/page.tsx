@@ -7,6 +7,7 @@ type NotesFilterParams = {
   params: { slug: string[] };
 };
 
+
 // Генерація мета-тегів
 export async function generateMetadata({ params }: NotesFilterParams): Promise<Metadata> {
   const { slug } = params;
