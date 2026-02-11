@@ -1,5 +1,6 @@
 import { getNotes } from "@/lib/api";
 import NotesClient from "./Notes.client";
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import type { Metadata } from "next";
 
 // Типи для параметрів catch-all маршруту
@@ -36,11 +37,17 @@ export default async function NotesPage({ params }: NotesFilterParams) {
   const { slug } = (await params)!;
   const tagNote = slug[0] === "all" ? undefined : slug[0];
 
-  const { notes, totalPages } = await getNotes("", 1, tagNote);
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["notes", "", 1, tagNote],
+    queryFn: () => getNotes("", 1, tagNote),
+  });
 
   return (
-    <section>
-      <NotesClient initialData={{ notes, totalPages }} initialTag={tagNote} />
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <section>
+        <NotesClient initialTag={tagNote} />
+      </section>
+    </HydrationBoundary>
   );
 }
