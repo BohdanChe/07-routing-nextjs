@@ -4,13 +4,13 @@ import type { Metadata } from "next";
 
 // Типи для параметрів catch-all маршруту
 type NotesFilterParams = {
-  params: { slug: string[] };
+  params?: Promise<{ slug: string[] }>;
 };
 
 
 // Генерація мета-тегів
 export async function generateMetadata({ params }: NotesFilterParams): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = (await params)!;
   const filter = slug.join(", ");
 
   return {
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: NotesFilterParams): Promise<M
 }
 
 export default async function NotesPage({ params }: NotesFilterParams) {
-  const { slug } = params;
+  const { slug } = (await params)!;
   const tagNote = slug[0] === "all" ? undefined : slug[0];
 
   const { notes, totalPages } = await getNotes("", 1, tagNote);

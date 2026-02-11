@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import css from "./layoutNotes.module.css";
 import { Metadata } from "next";
 
-export const generatemetadata: Metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL('https://notehub.com'),
   title: 'NoteHub',
   description: 'Home page',

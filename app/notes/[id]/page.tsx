@@ -5,12 +5,12 @@ import type { Metadata } from "next";
 
 // Типи для параметрів маршруту
 type NoteDetailsParams = {
-  params: { id: string };
+  params?: Promise<{ id: string }>;
 };
 
 // Генерація мета-тегів
 export async function generateMetadata({ params }: NoteDetailsParams): Promise<Metadata> {
-  const { id } = params;
+  const { id } = (await params)!;
 
   const note = await getSingleNote(id);
   const description = note.content.slice(0, 100);
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: NoteDetailsParams): Promise<M
 
 // Асинхронний компонент сторінки
 const NoteDetails = async ({ params }: NoteDetailsParams) => {
-  const { id } = params;
+  const { id } = (await params)!;
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
