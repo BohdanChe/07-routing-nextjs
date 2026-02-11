@@ -1,18 +1,11 @@
 import { getNotes } from "@/lib /api";
-import { Metadata } from "next";
 import NotesClient from "./Notes.client";
+import type { Metadata } from "next";
 
-// -------------------------
 // Генерація мета-тегів
-// -------------------------
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string[] }> | { slug: string[] };
-}): Promise<Metadata> {
-  // Якщо params — Promise, потрібно дочекатися
-  const resolvedParams = params instanceof Promise ? await params : params;
-  const filter = resolvedParams.slug.join(", ");
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  const { slug } = params;
+  const filter = slug.join(", ");
 
   return {
     title: `Notes filtered by: ${filter}`,
@@ -20,7 +13,7 @@ export async function generateMetadata({
     openGraph: {
       title: `Notes filtered by: ${filter}`,
       description: `Notes filtered by ${filter}.`,
-      url: `https://notehub.com/notes/filter/${resolvedParams.slug.join("/")}`,
+      url: `https://notehub.com/notes/filter/${slug.join("/")}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
@@ -33,20 +26,9 @@ export async function generateMetadata({
   };
 }
 
-// -------------------------
-// Тип для параметрів маршруту
-// -------------------------
-type Props = {
-  params: Promise<{ slug: string[] }> | { slug: string[] };
-};
-
-// -------------------------
 // Асинхронний компонент сторінки
-// -------------------------
-export default async function NotesPage({ params }: Props) {
-  // Дочекаємося params
-  const { slug } = params instanceof Promise ? await params : params;
-
+export default async function NotesPage({ params }: unknown) {
+  const { slug } = params;
   const tagNote = slug[0] === "all" ? undefined : slug[0];
 
   const { notes, totalPages } = await getNotes("", 1, tagNote);

@@ -3,16 +3,14 @@ import { getSingleNote } from "@/lib /api";
 import NoteDetailsClient from "./NoteDetails.client";
 import type { Metadata } from "next";
 
-// -------------------------
-// Метадані сторінки
-// -------------------------
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }> | { id: string };
-}): Promise<Metadata> {
-  const resolvedParams = params instanceof Promise ? await params : params;
-  const { id } = resolvedParams;
+// Типи для параметрів маршруту
+type NoteDetailsParams = {
+  params: { id: string };
+};
+
+// Генерація мета-тегів
+export async function generateMetadata({ params }: NoteDetailsParams): Promise<Metadata> {
+  const { id } = params;
 
   const note = await getSingleNote(id);
   const description = note.content.slice(0, 100);
@@ -36,19 +34,9 @@ export async function generateMetadata({
   };
 }
 
-// -------------------------
-// Типи для параметрів
-// -------------------------
-type NoteDetailsProps = {
-  params: Promise<{ id: string }> | { id: string };
-};
-
-// -------------------------
 // Асинхронний компонент сторінки
-// -------------------------
-const NoteDetails = async ({ params }: NoteDetailsProps) => {
-  const resolvedParams = params instanceof Promise ? await params : params;
-  const { id } = resolvedParams;
+const NoteDetails = async ({ params }: NoteDetailsParams) => {
+  const { id } = params;
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
