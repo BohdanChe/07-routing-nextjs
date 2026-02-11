@@ -2,8 +2,13 @@ import { getNotes } from "@/lib /api";
 import NotesClient from "./Notes.client";
 import type { Metadata } from "next";
 
+// Типи для параметрів catch-all маршруту
+type NotesFilterParams = {
+  params: { slug: string[] };
+};
+
 // Генерація мета-тегів
-export async function generateMetadata({ params }: any): Promise<Metadata> {
+export async function generateMetadata({ params }: NotesFilterParams): Promise<Metadata> {
   const { slug } = params;
   const filter = slug.join(", ");
 
@@ -27,7 +32,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 }
 
 // Асинхронний компонент сторінки
-export default async function NotesPage({ params }: unknown) {
+export default async function NotesPage({ params }: NotesFilterParams) {
   const { slug } = params;
   const tagNote = slug[0] === "all" ? undefined : slug[0];
 
