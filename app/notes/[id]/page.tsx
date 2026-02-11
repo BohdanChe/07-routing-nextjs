@@ -1,8 +1,4 @@
-import {
-  QueryClient,
-  HydrationBoundary,
-  dehydrate,
-} from "@tanstack/react-query";
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getSingleNote } from "@/lib /api";
 import NoteDetailsClient from "./NoteDetails.client";
 import type { Metadata } from "next";
@@ -32,13 +28,13 @@ export async function generateMetadata(
       ],
     },
   };
-}
+};
 
-type Props = {
+type NoteDetailsProps = {
   params: { id: string };
 };
 
-const NoteDetails = async ({ params }: Props) => {
+const NoteDetails = async ({ params }: NoteDetailsProps) => {
   const { id } = params;
   const queryClient = new QueryClient();
 
