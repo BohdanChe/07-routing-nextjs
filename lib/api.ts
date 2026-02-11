@@ -30,7 +30,7 @@ export const getNotes = async (
 
   return response.data;
 };
-export const getSingleNote = async (id: string) => {
+export const getSingleNote = async (id: string): Promise<Note> => {
   const res = await axios.get<Note>(`/notes/${id}`);
   return res.data;
 };
