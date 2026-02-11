@@ -12,6 +12,7 @@ import Modal from "@/components/Modal/Modal";
 import EmptyState from "@/components/EmptyState/EmptyState";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
+import type { NoteTag } from "@/types/note";
 
 const useToggle = (): [boolean, () => void, () => void] => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +20,7 @@ const useToggle = (): [boolean, () => void, () => void] => {
 };
 
 interface NotesClientProps {
-  initialTag?: string;
+  initialTag?: NoteTag;
 }
 
 export default function NotesClient({ initialTag }: NotesClientProps) {

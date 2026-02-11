@@ -2,6 +2,7 @@ import { getNotes } from "@/lib/api";
 import NotesClient from "./Notes.client";
 import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import type { Metadata } from "next";
+import type { NoteTag } from "@/types/note";
 
 // Типи для параметрів catch-all маршруту
 type NotesFilterParams = {
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: NotesFilterParams): Promise<M
 
 export default async function NotesPage({ params }: NotesFilterParams) {
   const { slug } = (await params)!;
-  const tagNote = slug[0] === "all" ? undefined : slug[0];
+  const tagNote: NoteTag | undefined = slug[0] === "all" ? undefined : (slug[0] as NoteTag);
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
