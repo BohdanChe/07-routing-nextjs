@@ -32,7 +32,6 @@ export async function generateMetadata({ params }: NotesFilterParams): Promise<M
   };
 }
 
-// Асинхронний компонент сторінки
 export default async function NotesPage({ params }: NotesFilterParams) {
   const { slug } = params;
   const tagNote = slug[0] === "all" ? undefined : slug[0];

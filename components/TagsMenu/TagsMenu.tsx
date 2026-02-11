@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import css from "./TagsMenu.module.css";
 import Link from "next/link";
-import { tags } from "@/types /note";
-import DropdownPortal from "@/components /DropdownPortal/DropdownPortal";
+import { tags } from "@/types/note";
+import DropdownPortal from "@/components/DropdownPortal/DropdownPortal";
 
 const TagsMenu = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
